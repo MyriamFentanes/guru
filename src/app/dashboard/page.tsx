@@ -37,12 +37,15 @@ export default async function DashboardPage() {
                 <li key={c.id}>
                   <Link
                     href={`/classes/${c.id}`}
-                    className="block border border-accent-taupe px-4 py-3 hover:border-ink"
+                    className="flex items-center justify-between border border-accent-taupe px-4 py-3 hover:border-ink"
                   >
-                    <span className="text-ink">{c.classType}</span>{" "}
-                    <span className="text-muted">
-                      &middot; {c.level} &middot; {c.durationMinutes} min
+                    <span>
+                      <span className="text-ink">{c.classType}</span>{" "}
+                      <span className="text-muted">
+                        &middot; {c.level} &middot; {c.durationMinutes} min
+                      </span>
                     </span>
+                    <span className="label text-muted">{c.status}</span>
                   </Link>
                 </li>
               ))}
