@@ -1,0 +1,13 @@
+{
+  "slug": "forearm-stand-tuck",
+  "name": "Forearm Stand (Tucked Entry)",
+  "sanskritName": "Pincha Mayurasana",
+  "otherNames": ["Feathered Peacock Pose", "Forearm Balance - Tuck"],
+  "musclesInvolved": ["shoulders", "core", "back"],
+  "series": [],
+  "durationSeconds": 15,
+  "assists": ["wall support", "spotting at hips"],
+  "image": "image.jpeg",
+  "verified": false,
+  "notes": "Draft entry from seed photo import; review and correct before use in a real class. Tucked entry point for the full forearm stand - candidate progression pairing with forearm-stand-full once Flow 3 (progressions) exists."
+}
