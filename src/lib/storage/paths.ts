@@ -12,6 +12,14 @@ export function classFilePath(classId: string): string {
   return path.join(CLASSES_DIR, `${classId}.json`);
 }
 
+export function asanaDir(slug: string): string {
+  return path.join(ASANAS_DIR, slug);
+}
+
 export function asanaMetaPath(slug: string): string {
   return path.join(ASANAS_DIR, slug, "meta.json");
+}
+
+export function asanaImagePath(slug: string, filename: string): string {
+  return path.join(ASANAS_DIR, slug, filename);
 }

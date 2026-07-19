@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { SESSION_COOKIE, verifySessionToken } from "@/lib/auth/session";
 
-const PROTECTED_PREFIXES = ["/dashboard", "/classes"];
+const PROTECTED_PREFIXES = ["/dashboard", "/classes", "/asanas"];
 
 export async function proxy(req: NextRequest) {
   const isProtected = PROTECTED_PREFIXES.some((p) => req.nextUrl.pathname.startsWith(p));
@@ -18,5 +18,5 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/classes/:path*"],
+  matcher: ["/dashboard/:path*", "/classes/:path*", "/asanas/:path*"],
 };

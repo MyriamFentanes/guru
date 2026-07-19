@@ -18,9 +18,14 @@ export default async function DashboardPage() {
           <LogoutButton />
         </div>
 
-        <Link href="/classes/new" className="button-primary inline-block">
-          + New class
-        </Link>
+        <div className="flex gap-4">
+          <Link href="/classes/new" className="button-primary inline-block">
+            + New class
+          </Link>
+          <Link href="/asanas" className="label inline-flex items-center text-muted hover:text-ink">
+            Asana repository
+          </Link>
+        </div>
 
         <div className="mt-12">
           <p className="label mb-4 text-muted">Your classes</p>

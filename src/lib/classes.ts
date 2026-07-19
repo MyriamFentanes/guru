@@ -35,6 +35,31 @@ export async function getClassById(id: string): Promise<ClassDraft | null> {
   return readJson<ClassDraft>(classFilePath(id));
 }
 
+export async function addAsanaToClass(
+  classId: string,
+  asanaSlug: string
+): Promise<ClassDraft | null> {
+  const classDraft = await getClassById(classId);
+  if (!classDraft) return null;
+  classDraft.asanas.push({ asanaSlug, repetitions: 1 });
+  classDraft.updatedAt = new Date().toISOString();
+  await writeJson(classFilePath(classId), classDraft);
+  return classDraft;
+}
+
+export async function removeAsanaFromClass(
+  classId: string,
+  asanaSlug: string
+): Promise<ClassDraft | null> {
+  const classDraft = await getClassById(classId);
+  if (!classDraft) return null;
+  const index = classDraft.asanas.findIndex((a) => a.asanaSlug === asanaSlug);
+  if (index !== -1) classDraft.asanas.splice(index, 1);
+  classDraft.updatedAt = new Date().toISOString();
+  await writeJson(classFilePath(classId), classDraft);
+  return classDraft;
+}
+
 export async function listClassesByTeacher(teacherId: string): Promise<ClassDraft[]> {
   let files: string[];
   try {
