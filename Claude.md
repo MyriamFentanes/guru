@@ -10,4 +10,6 @@ Flow 3 - When I am configuring my class I can see the total duration of the clas
 Flow 4- I can also replay the whole class or selected asanas to see the flow. 
 Flow 5- When I am done I can save my class in a catalog of classes that I curate and that are persisted.
 Flow 6 - I can also download the whole class as a PDF
+Flow 7 - When I select the asana from the catalog I can doubleclick and see the description of the asanas
+Flow 8 - I can see in the catalog if an image is verified or not
  
