@@ -1,0 +1,14 @@
+{
+  "$schema": "../asana.schema.json",
+  "slug": "REPLACE-WITH-FOLDER-NAME",
+  "name": "",
+  "sanskritName": "",
+  "otherNames": [],
+  "musclesInvolved": [],
+  "series": [],
+  "durationSeconds": 30,
+  "assists": [],
+  "image": "image.jpeg",
+  "verified": false,
+  "notes": ""
+}

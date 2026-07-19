@@ -1,4 +1,5 @@
 {
+  "$schema": "../asana.schema.json",
   "slug": "forearm-stand-tuck",
   "name": "Forearm Stand (Tucked Entry)",
   "sanskritName": "Pincha Mayurasana",

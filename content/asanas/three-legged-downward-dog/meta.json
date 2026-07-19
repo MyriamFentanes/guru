@@ -1,4 +1,5 @@
 {
+  "$schema": "../asana.schema.json",
   "slug": "three-legged-downward-dog",
   "name": "Three-Legged Downward Dog",
   "sanskritName": "Eka Pada Adho Mukha Svanasana",

@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://guru.local/content/asanas/asana.schema.json",
+  "title": "Asana",
+  "description": "Metadata for one asana in the curated repository. Lives alongside its image as content/asanas/<slug>/meta.json.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["slug", "name", "sanskritName", "durationSeconds", "image", "verified"],
+  "properties": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "URL/filename-safe id. Must match the containing folder name."
+    },
+    "name": {
+      "type": "string",
+      "description": "Common English name, e.g. \"Downward-Facing Dog\"."
+    },
+    "sanskritName": {
+      "type": "string",
+      "description": "Name in Sanskrit, e.g. \"Adho Mukha Svanasana\"."
+    },
+    "otherNames": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Any additional names or spellings this asana is known by."
+    },
+    "musclesInvolved": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Primary muscle groups engaged, e.g. \"shoulders\", \"hamstrings\"."
+    },
+    "series": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Predefined series this asana belongs to, e.g. \"suria namaskar A\", \"ashtanga primary series\"."
+    },
+    "durationSeconds": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Default hold duration in seconds, used for class duration calculations."
+    },
+    "assists": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Physical assists a teacher can offer for this asana, e.g. \"push downward on the lumbar zone\"."
+    },
+    "image": {
+      "type": "string",
+      "description": "Filename of the image in this asana's folder, e.g. \"image.jpeg\"."
+    },
+    "verified": {
+      "type": "boolean",
+      "description": "False for draft/auto-generated entries. Set true once a teacher has reviewed and confirmed the metadata."
+    },
+    "description": {
+      "type": "string",
+      "description": "Longer explanatory text about the pose - origin of the name, what it does, how it feels. Shown to teachers/students, distinct from \"notes\"."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Free-text notes for curators, e.g. provenance of the entry or caveats - not shown to end users."
+    }
+  }
+}

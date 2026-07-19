@@ -1,4 +1,5 @@
 {
+  "$schema": "../asana.schema.json",
   "slug": "forearm-stand-full",
   "name": "Forearm Stand (Full Extension)",
   "sanskritName": "Pincha Mayurasana",

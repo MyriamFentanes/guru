@@ -1,13 +1,15 @@
 {
+  "$schema": "../asana.schema.json",
   "slug": "downward-facing-dog",
   "name": "Downward-Facing Dog",
   "sanskritName": "Adho Mukha Svanasana",
   "otherNames": [],
   "musclesInvolved": ["shoulders", "hamstrings", "calves", "core"],
-  "series": [],
+  "series": ["suria namaskar A"],
   "durationSeconds": 30,
-  "assists": [],
+  "assists": ["push downward on the lumbar zone"],
   "image": "image.jpeg",
-  "verified": false,
+  "verified": true,
+  "description": "Adho Mukha Svanasana (Downward-Facing Dog) gets its name from Sanskrit: Adho (down), Mukha (face), Svana (dog), and Asana (pose). It mimics the deep, natural stretch of a waking dog. The pose stretches your legs, builds upper-body strength, and acts as an active resting position",
   "notes": "Draft entry from seed photo import; review and correct before use in a real class."
 }

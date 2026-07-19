@@ -1,4 +1,5 @@
 {
+  "$schema": "../asana.schema.json",
   "slug": "plank-pose",
   "name": "Plank Pose",
   "sanskritName": "Phalakasana",
