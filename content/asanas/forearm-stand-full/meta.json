@@ -1,0 +1,13 @@
+{
+  "slug": "forearm-stand-full",
+  "name": "Forearm Stand (Full Extension)",
+  "sanskritName": "Pincha Mayurasana",
+  "otherNames": ["Feathered Peacock Pose"],
+  "musclesInvolved": ["shoulders", "core", "back", "wrists"],
+  "series": [],
+  "durationSeconds": 20,
+  "assists": ["wall support", "spotting at hips"],
+  "image": "image.jpeg",
+  "verified": false,
+  "notes": "Draft entry from seed photo import; review and correct before use in a real class. Full extension - candidate progression pairing with forearm-stand-tuck once Flow 3 (progressions) exists."
+}

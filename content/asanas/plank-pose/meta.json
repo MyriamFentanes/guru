@@ -1,0 +1,13 @@
+{
+  "slug": "plank-pose",
+  "name": "Plank Pose",
+  "sanskritName": "Phalakasana",
+  "otherNames": ["Kumbhakasana"],
+  "musclesInvolved": ["core", "shoulders", "wrists", "quadriceps"],
+  "series": [],
+  "durationSeconds": 30,
+  "assists": [],
+  "image": "image.jpeg",
+  "verified": false,
+  "notes": "Draft entry from seed photo import; review and correct before use in a real class."
+}
