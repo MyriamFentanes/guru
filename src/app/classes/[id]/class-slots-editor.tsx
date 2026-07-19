@@ -1,16 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { computeTotalDurationSeconds, formatDuration } from "@/lib/duration";
-
-export interface ResolvedSlot {
-  id: string;
-  asanaSlugs: string[];
-  primaryAsanaSlug: string;
-  repetitions: number;
-  asanas: { slug: string; name: string; durationSeconds: number }[];
-}
+import type { ResolvedSlot } from "@/lib/resolve-slots";
 
 interface Props {
   classId: string;
@@ -18,6 +12,7 @@ interface Props {
 }
 
 export default function ClassSlotsEditor({ classId, initialSlots }: Props) {
+  const router = useRouter();
   const [slots, setSlots] = useState(initialSlots);
   const [selected, setSelected] = useState<string[]>([]);
   const [busy, setBusy] = useState<string | null>(null);
@@ -43,6 +38,11 @@ export default function ClassSlotsEditor({ classId, initialSlots }: Props) {
 
   function toggleSelected(slotId: string) {
     setSelected((prev) => (prev.includes(slotId) ? prev.filter((id) => id !== slotId) : [...prev, slotId]));
+  }
+
+  function handleReplay(slotIds?: string[]) {
+    const query = slotIds ? `?slots=${slotIds.join(",")}` : "";
+    router.push(`/classes/${classId}/replay${query}`);
   }
 
   async function handleRepetitionsChange(slotId: string, repetitions: number) {
@@ -109,6 +109,12 @@ export default function ClassSlotsEditor({ classId, initialSlots }: Props) {
         <p className="text-ink">{formatDuration(totalSeconds)}</p>
       </div>
 
+      {slots.length > 0 && (
+        <button onClick={() => handleReplay()} className="button-primary mb-4">
+          ▶ Replay full class
+        </button>
+      )}
+
       {error && <p className="mb-4 text-sm text-red-700">{error}</p>}
 
       {slots.length === 0 ? (
@@ -155,10 +161,17 @@ export default function ClassSlotsEditor({ classId, initialSlots }: Props) {
         </ul>
       )}
 
-      {selected.length >= 2 && (
-        <button onClick={handleGroup} disabled={busy === "group"} className="button-primary mt-4">
-          {busy === "group" ? "Grouping..." : `Group ${selected.length} selected as progression`}
-        </button>
+      {selected.length >= 1 && (
+        <div className="mt-4 flex gap-4">
+          <button onClick={() => handleReplay(selected)} className="button-primary">
+            ▶ Replay {selected.length} selected
+          </button>
+          {selected.length >= 2 && (
+            <button onClick={handleGroup} disabled={busy === "group"} className="button-primary">
+              {busy === "group" ? "Grouping..." : `Group ${selected.length} selected as progression`}
+            </button>
+          )}
+        </div>
       )}
 
       <div>

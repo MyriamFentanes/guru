@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import { getSession } from "@/lib/auth/session";
 import { getClassById } from "@/lib/classes";
-import { getAsanaBySlug } from "@/lib/asanas";
-import ClassSlotsEditor, { type ResolvedSlot } from "./class-slots-editor";
+import { resolveSlotsWithAsanas } from "@/lib/resolve-slots";
+import ClassSlotsEditor from "./class-slots-editor";
 
 export default async function ClassDetailPage({
   params,
@@ -17,19 +17,7 @@ export default async function ClassDetailPage({
     notFound();
   }
 
-  const resolvedSlots: ResolvedSlot[] = await Promise.all(
-    classDraft.slots.map(async (slot) => ({
-      ...slot,
-      asanas: (
-        await Promise.all(
-          slot.asanaSlugs.map(async (slug) => {
-            const asana = await getAsanaBySlug(slug);
-            return asana ? { slug, name: asana.name, durationSeconds: asana.durationSeconds } : null;
-          })
-        )
-      ).filter((a): a is { slug: string; name: string; durationSeconds: number } => a !== null),
-    }))
-  );
+  const resolvedSlots = await resolveSlotsWithAsanas(classDraft.slots);
 
   return (
     <div className="flex flex-1 justify-center bg-background-warm">
