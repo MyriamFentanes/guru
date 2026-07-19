@@ -32,8 +32,16 @@ export interface Asana {
 export type ClassLevel = "beginner" | "intermediate" | "advanced";
 export type ClassStatus = "draft" | "saved";
 
-export interface ClassAsanaEntry {
-  asanaSlug: string;
+/**
+ * One position in a class. Usually a single asana; when asanaSlugs has
+ * more than one entry, they're progressions of the same slot -
+ * repetitions applies once to the whole slot, and only
+ * primaryAsanaSlug's durationSeconds counts toward class duration.
+ */
+export interface ClassSlot {
+  id: string;
+  asanaSlugs: string[];
+  primaryAsanaSlug: string;
   repetitions: number;
 }
 
@@ -46,7 +54,7 @@ export interface ClassDraft {
   series?: string;
   classType: string;
   focus?: string;
-  asanas: ClassAsanaEntry[];
+  slots: ClassSlot[];
   createdAt: string;
   updatedAt: string;
 }

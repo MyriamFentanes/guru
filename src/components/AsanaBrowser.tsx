@@ -59,7 +59,7 @@ export default function AsanaBrowser({ mode, classId, existingSlugs = [] }: Prop
     if (!classId) return;
     setAddingSlug(slug);
     try {
-      const res = await fetch(`/api/classes/${classId}/asanas`, {
+      const res = await fetch(`/api/classes/${classId}/slots`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ asanaSlug: slug }),
