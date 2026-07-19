@@ -1,6 +1,9 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSession } from "@/lib/auth/session";
 import { getClassById } from "@/lib/classes";
+import { getAsanaBySlug } from "@/lib/asanas";
+import RemoveAsanaButton from "./remove-asana-button";
 
 export default async function ClassDetailPage({
   params,
@@ -14,6 +17,13 @@ export default async function ClassDetailPage({
   if (!session || !classDraft || classDraft.teacherId !== session.userId) {
     notFound();
   }
+
+  const asanaEntries = await Promise.all(
+    classDraft.asanas.map(async (entry) => ({
+      entry,
+      asana: await getAsanaBySlug(entry.asanaSlug),
+    }))
+  );
 
   return (
     <div className="flex flex-1 justify-center bg-background-warm">
@@ -42,11 +52,26 @@ export default async function ClassDetailPage({
             </div>
           )}
           <div>
-            <dt className="label text-muted">Asanas</dt>
-            <dd className="text-muted">
-              {classDraft.asanas.length === 0
-                ? "None added yet."
-                : `${classDraft.asanas.length} asana(s)`}
+            <dt className="label mb-2 text-muted">Asanas</dt>
+            <dd>
+              {asanaEntries.length === 0 ? (
+                <p className="text-muted">None added yet.</p>
+              ) : (
+                <ul className="flex flex-col gap-2">
+                  {asanaEntries.map(({ entry, asana }) => (
+                    <li
+                      key={entry.asanaSlug}
+                      className="flex items-center justify-between border border-accent-taupe px-4 py-2"
+                    >
+                      <span className="text-ink">{asana?.name ?? entry.asanaSlug}</span>
+                      <RemoveAsanaButton classId={classDraft.id} slug={entry.asanaSlug} />
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <Link href={`/classes/${classDraft.id}/add-asanas`} className="button-primary mt-4 inline-block">
+                + Add asanas
+              </Link>
             </dd>
           </div>
         </dl>

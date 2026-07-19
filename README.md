@@ -15,9 +15,10 @@ The app expects an `AUTH_SECRET` env var (see `.env.local`, generated locally an
 
 Storage is flat-file for now (decision: files now, real database later once it's needed). Everything under `data/` and `content/` is read/written **only** through `src/lib/storage/file-store.ts` and the repository modules built on it (e.g. `src/lib/users.ts`) — no other code touches the filesystem directly. That's the seam where a future swap to a real database happens without touching routes or UI.
 
-- `content/asanas/<slug>/meta.json` + `image.*` — the curated asana repository. Committed to git; this is editorial content, not runtime data.
-  - Schema and field docs: [`content/asanas/asana.schema.json`](./content/asanas/asana.schema.json). To add a new asana, copy `content/asanas/_template/` — see [`content/asanas/README.md`](./content/asanas/README.md).
+- `content/asanas/<slug>/meta.json` + `image.*` — the curated asana repository. Seeded and versioned in git, but as of Flow 2 (#3) also **writable at runtime**: teachers can add/edit/delete asanas from the app (`/asanas`), which writes straight to this folder via `src/lib/asanas.ts`. That means the working tree can diverge from what's committed — anything added/edited through the UI needs an explicit `git add`/commit to actually persist past the local filesystem. The git-template workflow below still works for hand-authoring entries.
+  - Schema and field docs: [`content/asanas/asana.schema.json`](./content/asanas/asana.schema.json). To add a new asana via git instead of the UI, copy `content/asanas/_template/` — see [`content/asanas/README.md`](./content/asanas/README.md).
   - The seed set was auto-drafted from photos and is marked `verified: false` until a teacher reviews it.
+  - Images aren't under `public/`, so they're served through `/api/asanas/[slug]/image` rather than as static assets.
 - `data/users.json` — user accounts (bcrypt password hashes, role). Gitignored; runtime data.
 - `data/classes/<id>.json` — saved classes. Gitignored; runtime data.
 

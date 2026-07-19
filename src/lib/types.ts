@@ -14,6 +14,21 @@ export interface SessionPayload {
   role: Role;
 }
 
+export interface Asana {
+  slug: string;
+  name: string;
+  sanskritName: string;
+  otherNames: string[];
+  musclesInvolved: string[];
+  series: string[];
+  durationSeconds: number;
+  assists: string[];
+  image: string;
+  verified: boolean;
+  description?: string;
+  notes?: string;
+}
+
 export type ClassLevel = "beginner" | "intermediate" | "advanced";
 export type ClassStatus = "draft" | "saved";
 

@@ -1,4 +1,4 @@
-import { mkdir, readFile, rename, unlink, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rename, rm, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 
@@ -60,5 +60,29 @@ export async function deleteJson(filePath: string): Promise<void> {
     } catch (err) {
       if ((err as NodeJS.ErrnoException).code !== "ENOENT") throw err;
     }
+  });
+}
+
+export async function readBinaryFile(filePath: string): Promise<Buffer | null> {
+  try {
+    return await readFile(filePath);
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code === "ENOENT") return null;
+    throw err;
+  }
+}
+
+export async function writeBinaryFile(filePath: string, data: Buffer): Promise<void> {
+  await withFileLock(filePath, async () => {
+    await mkdir(path.dirname(filePath), { recursive: true });
+    const tmpPath = `${filePath}.${randomUUID()}.tmp`;
+    await writeFile(tmpPath, data);
+    await rename(tmpPath, filePath);
+  });
+}
+
+export async function removeDir(dirPath: string): Promise<void> {
+  await withFileLock(dirPath, async () => {
+    await rm(dirPath, { recursive: true, force: true });
   });
 }
