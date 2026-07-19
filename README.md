@@ -16,8 +16,8 @@ The app expects an `AUTH_SECRET` env var (see `.env.local`, generated locally an
 Storage is flat-file for now (decision: files now, real database later once it's needed). Everything under `data/` and `content/` is read/written **only** through `src/lib/storage/file-store.ts` and the repository modules built on it (e.g. `src/lib/users.ts`) — no other code touches the filesystem directly. That's the seam where a future swap to a real database happens without touching routes or UI.
 
 - `content/asanas/<slug>/meta.json` + `image.*` — the curated asana repository. Committed to git; this is editorial content, not runtime data.
-  - Schema: `slug`, `name`, `sanskritName`, `otherNames[]`, `musclesInvolved[]`, `series[]`, `durationSeconds`, `assists[]`, `image`, `verified`, `notes`.
-  - The seed set was auto-drafted from photos and is marked `verified: false` — review before using in a real class.
+  - Schema and field docs: [`content/asanas/asana.schema.json`](./content/asanas/asana.schema.json). To add a new asana, copy `content/asanas/_template/` — see [`content/asanas/README.md`](./content/asanas/README.md).
+  - The seed set was auto-drafted from photos and is marked `verified: false` until a teacher reviews it.
 - `data/users.json` — user accounts (bcrypt password hashes, role). Gitignored; runtime data.
 - `data/classes/<id>.json` — saved classes. Gitignored; runtime data.
 
@@ -30,6 +30,16 @@ Concurrent writes to a given JSON file are serialized with an in-process lock in
 - `src/lib/auth/rbac.ts` exports `withAuth(handler, allowedRoles?)` to wrap API route handlers: 401 if there's no session, 403 if the session's role isn't in `allowedRoles`.
   - `src/app/api/me/route.ts` — any authenticated role.
   - `src/app/api/admin/ping/route.ts` — `admin` only; a `teacher` session gets 403. Reference example for role-gated routes.
+
+### Design system
+
+Visual direction is a warm, minimal boutique-studio look (reference: [barrefit.es](https://barrefit.es/), [@bodyflyingbcn](https://www.instagram.com/bodyflyingbcn/)). Tokens live in `src/app/globals.css`:
+
+- **Colors**: `background` (white) / `background-warm` (`#F8F3F2` cream) / `accent-taupe` (`#E4D7D4`) for surfaces, `ink` (black) for headings/emphasis, `foreground` (`#333`) for body text, `muted` (`#777`) for secondary text. Each has a dark-mode value via `prefers-color-scheme`.
+- **Type**: Raleway (`--font-sans`) for body/UI, Josefin Sans (`--font-display`, light weight) for headings.
+- **The `.label` class**: small, uppercase, wide letter-spacing — use it for buttons, nav, and eyebrow text, matching the reference sites' understated CTA style.
+
+This was extrapolated from Barrefit's live site styles (colors/fonts read directly from its computed styles) since Instagram profiles aren't scriptable without login; treat it as a starting point to refine once there's real UI to react to.
 
 ### Dev account
 
