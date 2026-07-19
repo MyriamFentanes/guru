@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <div className="flex flex-1 items-center justify-center bg-background-warm">
@@ -6,12 +8,14 @@ export default function Home() {
         <h1 className="text-4xl text-ink sm:text-5xl">Guru</h1>
         <p className="text-lg leading-8 text-muted">
           Build, preview, and share a flow without doing it by hand on paper.
-          Setup scaffold is in place; flows land next.
         </p>
-        <div>
+        <div className="flex flex-wrap justify-center gap-4 sm:justify-start">
+          <Link href="/login" className="button-primary">
+            Log in
+          </Link>
           <a
             href="https://github.com/MyriamFentanes/guru/issues"
-            className="label inline-block border border-ink px-6 py-3 text-ink transition-colors hover:bg-ink hover:text-background"
+            className="label inline-flex items-center text-muted hover:text-ink"
           >
             View roadmap
           </a>
