@@ -1,9 +1,8 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSession } from "@/lib/auth/session";
 import { getClassById } from "@/lib/classes";
 import { getAsanaBySlug } from "@/lib/asanas";
-import RemoveAsanaButton from "./remove-asana-button";
+import ClassSlotsEditor, { type ResolvedSlot } from "./class-slots-editor";
 
 export default async function ClassDetailPage({
   params,
@@ -18,10 +17,17 @@ export default async function ClassDetailPage({
     notFound();
   }
 
-  const asanaEntries = await Promise.all(
-    classDraft.asanas.map(async (entry) => ({
-      entry,
-      asana: await getAsanaBySlug(entry.asanaSlug),
+  const resolvedSlots: ResolvedSlot[] = await Promise.all(
+    classDraft.slots.map(async (slot) => ({
+      ...slot,
+      asanas: (
+        await Promise.all(
+          slot.asanaSlugs.map(async (slug) => {
+            const asana = await getAsanaBySlug(slug);
+            return asana ? { slug, name: asana.name, durationSeconds: asana.durationSeconds } : null;
+          })
+        )
+      ).filter((a): a is { slug: string; name: string; durationSeconds: number } => a !== null),
     }))
   );
 
@@ -32,7 +38,7 @@ export default async function ClassDetailPage({
         <h1 className="mb-8 text-3xl text-ink">{classDraft.classType}</h1>
         <dl className="flex flex-col gap-4">
           <div>
-            <dt className="label text-muted">Duration</dt>
+            <dt className="label text-muted">Target duration</dt>
             <dd className="text-ink">{classDraft.durationMinutes} minutes</dd>
           </div>
           <div>
@@ -54,24 +60,7 @@ export default async function ClassDetailPage({
           <div>
             <dt className="label mb-2 text-muted">Asanas</dt>
             <dd>
-              {asanaEntries.length === 0 ? (
-                <p className="text-muted">None added yet.</p>
-              ) : (
-                <ul className="flex flex-col gap-2">
-                  {asanaEntries.map(({ entry, asana }) => (
-                    <li
-                      key={entry.asanaSlug}
-                      className="flex items-center justify-between border border-accent-taupe px-4 py-2"
-                    >
-                      <span className="text-ink">{asana?.name ?? entry.asanaSlug}</span>
-                      <RemoveAsanaButton classId={classDraft.id} slug={entry.asanaSlug} />
-                    </li>
-                  ))}
-                </ul>
-              )}
-              <Link href={`/classes/${classDraft.id}/add-asanas`} className="button-primary mt-4 inline-block">
-                + Add asanas
-              </Link>
+              <ClassSlotsEditor classId={classDraft.id} initialSlots={resolvedSlots} />
             </dd>
           </div>
         </dl>

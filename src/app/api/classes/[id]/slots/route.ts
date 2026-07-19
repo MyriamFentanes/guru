@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { withAuth } from "@/lib/auth/rbac";
-import { addAsanaToClass, getClassById } from "@/lib/classes";
+import { addAsanaSlot, getClassById } from "@/lib/classes";
 import { getAsanaBySlug } from "@/lib/asanas";
 
 type Context = { params: Promise<{ id: string }> };
@@ -21,6 +21,6 @@ export const POST = withAuth<Context>(async (session, req, context) => {
     return NextResponse.json({ error: "Asana not found" }, { status: 404 });
   }
 
-  const updated = await addAsanaToClass(id, asanaSlug);
+  const updated = await addAsanaSlot(id, asanaSlug);
   return NextResponse.json(updated, { status: 201 });
 });

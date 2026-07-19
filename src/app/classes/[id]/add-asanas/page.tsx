@@ -29,7 +29,7 @@ export default async function AddAsanasPage({
         <AsanaBrowser
           mode="select"
           classId={id}
-          existingSlugs={classDraft.asanas.map((a) => a.asanaSlug)}
+          existingSlugs={classDraft.slots.flatMap((s) => s.asanaSlugs)}
         />
       </main>
     </div>
