@@ -42,6 +42,12 @@ export default function ClassDetailsSection({ classId, initial }: Props) {
             <dd className="text-ink">{initial.focus}</dd>
           </div>
         )}
+        {initial.notes && (
+          <div>
+            <dt className="label text-muted">Notes</dt>
+            <dd className="whitespace-pre-wrap text-ink">{initial.notes}</dd>
+          </div>
+        )}
       </dl>
       <button onClick={() => setEditing(true)} className="label mt-4 text-muted hover:text-ink">
         Edit details

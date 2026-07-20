@@ -55,6 +55,7 @@ export default async function ClassDetailPage({
               series: classDraft.series,
               classType: classDraft.classType,
               focus: classDraft.focus,
+              notes: classDraft.notes,
             }}
           />
           <div>
