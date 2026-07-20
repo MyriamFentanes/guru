@@ -40,9 +40,9 @@ export default async function DashboardPage() {
                     className="flex items-center justify-between border border-accent-taupe px-4 py-3 hover:border-ink"
                   >
                     <span>
-                      <span className="text-ink">{c.classType}</span>{" "}
+                      <span className="text-ink">{c.name}</span>{" "}
                       <span className="text-muted">
-                        &middot; {c.level} &middot; {c.durationMinutes} min
+                        &middot; {c.classType} &middot; {c.level} &middot; {c.durationMinutes} min
                       </span>
                     </span>
                     <span className="label text-muted">{c.status}</span>

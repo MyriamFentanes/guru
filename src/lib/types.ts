@@ -49,6 +49,7 @@ export interface ClassDraft {
   id: string;
   teacherId: string;
   status: ClassStatus;
+  name: string;
   durationMinutes: number;
   level: ClassLevel;
   series?: string;

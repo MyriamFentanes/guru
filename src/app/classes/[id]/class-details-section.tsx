@@ -19,6 +19,10 @@ export default function ClassDetailsSection({ classId, initial }: Props) {
     <div>
       <dl className="flex flex-col gap-4">
         <div>
+          <dt className="label text-muted">Class type</dt>
+          <dd className="text-ink">{initial.classType}</dd>
+        </div>
+        <div>
           <dt className="label text-muted">Target duration</dt>
           <dd className="text-ink">{initial.durationMinutes} minutes</dd>
         </div>

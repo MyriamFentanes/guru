@@ -12,8 +12,11 @@ export const GET = withAuth(async (session) => {
 
 export const POST = withAuth(async (session, req) => {
   const body = await req.json().catch(() => null);
-  const { durationMinutes, level, series, classType, focus } = body ?? {};
+  const { name, durationMinutes, level, series, classType, focus } = body ?? {};
 
+  if (typeof name !== "string" || name.trim().length === 0) {
+    return NextResponse.json({ error: "name is required" }, { status: 400 });
+  }
   if (typeof durationMinutes !== "number" || durationMinutes <= 0) {
     return NextResponse.json(
       { error: "durationMinutes must be a positive number" },
@@ -37,6 +40,7 @@ export const POST = withAuth(async (session, req) => {
   }
 
   const classDraft = await createClass(session.userId, {
+    name: name.trim(),
     durationMinutes,
     level: level as ClassLevel,
     series: series || undefined,
