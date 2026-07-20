@@ -64,8 +64,8 @@ export default function ReplayPlayer({ classId, frames }: Props) {
 
       <div className="mt-4 flex items-baseline justify-between">
         <div>
-          <p className="text-2xl text-ink">{frame.name}</p>
-          <p className="text-muted italic">{frame.sanskritName}</p>
+          <p className="text-2xl text-ink">{frame.sanskritName}</p>
+          <p className="text-muted italic">{frame.name}</p>
           {frame.isProgression && (
             <p className="label text-muted">
               Progression {frame.progressionIndex} of {frame.progressionCount}
