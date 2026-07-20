@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import SplitHero from "@/components/SplitHero";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -41,44 +42,42 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex flex-1 items-center justify-center bg-background-warm">
-      <main className="w-full max-w-sm px-8 py-16">
-        <p className="label text-muted">Guru</p>
-        <h1 className="mb-8 text-3xl text-ink">Create your account</h1>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-          <label className="flex flex-col gap-2">
-            <span className="label text-muted">Email</span>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="field-input"
-            />
-          </label>
-          <label className="flex flex-col gap-2">
-            <span className="label text-muted">Password</span>
-            <input
-              type="password"
-              required
-              minLength={8}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="field-input"
-            />
-          </label>
-          {error && <p className="text-sm text-red-700">{error}</p>}
-          <button type="submit" disabled={submitting} className="button-primary">
-            {submitting ? "Creating account..." : "Create account"}
-          </button>
-        </form>
-        <p className="mt-6 text-sm text-muted">
-          Already have an account?{" "}
-          <Link href="/login" className="text-ink underline">
-            Log in
-          </Link>
-        </p>
-      </main>
-    </div>
+    <SplitHero>
+      <p className="label text-muted">Guru</p>
+      <h1 className="mb-8 text-3xl text-ink">Create your account</h1>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+        <label className="flex flex-col gap-2">
+          <span className="label text-muted">Email</span>
+          <input
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="field-input"
+          />
+        </label>
+        <label className="flex flex-col gap-2">
+          <span className="label text-muted">Password</span>
+          <input
+            type="password"
+            required
+            minLength={8}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="field-input"
+          />
+        </label>
+        {error && <p className="text-sm text-red-700">{error}</p>}
+        <button type="submit" disabled={submitting} className="button-primary">
+          {submitting ? "Creating account..." : "Create account"}
+        </button>
+      </form>
+      <p className="mt-6 text-sm text-muted">
+        Already have an account?{" "}
+        <Link href="/login" className="text-ink underline">
+          Log in
+        </Link>
+      </p>
+    </SplitHero>
   );
 }

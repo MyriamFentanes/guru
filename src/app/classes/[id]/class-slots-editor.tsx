@@ -135,6 +135,12 @@ export default function ClassSlotsEditor({ classId, initialSlots }: Props) {
                   checked={selected.includes(slot.id)}
                   onChange={() => toggleSelected(slot.id)}
                 />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/api/asanas/${slot.primaryAsanaSlug}/image`}
+                  alt=""
+                  className="h-12 w-12 shrink-0 object-cover"
+                />
                 <div className="flex-1">
                   <span className="text-ink">{primary?.name ?? slot.primaryAsanaSlug}</span>
                   {others.length > 0 && (

@@ -3,6 +3,7 @@
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import SplitHero from "@/components/SplitHero";
 
 function LoginForm() {
   const router = useRouter();
@@ -37,7 +38,7 @@ function LoginForm() {
   }
 
   return (
-    <main className="w-full max-w-sm px-8 py-16">
+    <div>
       <p className="label text-muted">Guru</p>
       <h1 className="mb-8 text-3xl text-ink">Log in</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
@@ -72,16 +73,16 @@ function LoginForm() {
           Register
         </Link>
       </p>
-    </main>
+    </div>
   );
 }
 
 export default function LoginPage() {
   return (
-    <div className="flex flex-1 items-center justify-center bg-background-warm">
+    <SplitHero>
       <Suspense fallback={null}>
         <LoginForm />
       </Suspense>
-    </div>
+    </SplitHero>
   );
 }

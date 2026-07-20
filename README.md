@@ -43,6 +43,8 @@ Visual direction is a warm, minimal boutique-studio look (reference: [barrefit.e
 
 This was extrapolated from Barrefit's live site styles (colors/fonts read directly from its computed styles) since Instagram profiles aren't scriptable without login; treat it as a starting point to refine once there's real UI to react to.
 
+Palette/button mechanics are settled (see #31) after comparing against Arden Yoga and Seven Senses - not revisited without a new reason to. #31 also added `public/images/hero-asana.jpeg` (a static copy of the Downward-Facing Dog asana photo) used by `SplitHero` on the logged-out home, login, and register pages, since those are unauthenticated and can't hit the RBAC-gated `/api/asanas/[slug]/image` route. It's a snapshot, not a live reference - if that asana's photo is edited or deleted via the repository, this copy won't update automatically.
+
 ### PDF export
 
 `GET /api/classes/[id]/pdf` (linked from a saved class's detail page) generates a PDF on the fly with `pdfkit` - ordered slots, images, names, durations, progressions, and class metadata. `pdfkit` only embeds JPEG/PNG; a WebP asana image is skipped (text still renders) rather than failing the whole PDF.

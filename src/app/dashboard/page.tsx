@@ -41,22 +41,35 @@ export default async function DashboardPage() {
             <p className="text-muted">No classes yet.</p>
           ) : (
             <ul className="flex flex-col gap-3">
-              {classes.map((c) => (
-                <li key={c.id}>
-                  <Link
-                    href={`/classes/${c.id}`}
-                    className="flex items-center justify-between border border-accent-taupe px-4 py-3 hover:border-ink"
-                  >
-                    <span>
-                      <span className="text-ink">{c.name}</span>{" "}
-                      <span className="text-muted">
-                        &middot; {c.classType} &middot; {c.level} &middot; {c.durationMinutes} min
+              {classes.map((c) => {
+                const thumbnailSlug = c.slots[0]?.primaryAsanaSlug;
+                return (
+                  <li key={c.id}>
+                    <Link
+                      href={`/classes/${c.id}`}
+                      className="flex items-center gap-4 border border-accent-taupe px-4 py-3 hover:border-ink"
+                    >
+                      {thumbnailSlug ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={`/api/asanas/${thumbnailSlug}/image`}
+                          alt=""
+                          className="h-14 w-14 shrink-0 object-cover"
+                        />
+                      ) : (
+                        <div className="h-14 w-14 shrink-0 border border-accent-taupe" />
+                      )}
+                      <span className="flex-1">
+                        <span className="text-ink">{c.name}</span>{" "}
+                        <span className="text-muted">
+                          &middot; {c.classType} &middot; {c.level} &middot; {c.durationMinutes} min
+                        </span>
                       </span>
-                    </span>
-                    <span className="label text-muted">{c.status}</span>
-                  </Link>
-                </li>
-              ))}
+                      <span className="label text-muted">{c.status}</span>
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           )}
         </div>
