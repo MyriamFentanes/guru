@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { readdir } from "node:fs/promises";
 import { readJson, writeJson } from "@/lib/storage/file-store";
 import { CLASSES_DIR, classFilePath } from "@/lib/storage/paths";
-import type { ClassDraft, ClassLevel } from "@/lib/types";
+import type { ClassDraft, ClassLevel, ClassStatus } from "@/lib/types";
 
 export interface NewClassInput {
   durationMinutes: number;
@@ -10,6 +10,15 @@ export interface NewClassInput {
   series?: string;
   classType: string;
   focus?: string;
+}
+
+export interface ClassFieldsPatch {
+  durationMinutes?: number;
+  level?: ClassLevel;
+  series?: string;
+  classType?: string;
+  focus?: string;
+  status?: ClassStatus;
 }
 
 export async function createClass(teacherId: string, input: NewClassInput): Promise<ClassDraft> {
@@ -33,6 +42,16 @@ export async function createClass(teacherId: string, input: NewClassInput): Prom
 
 export async function getClassById(id: string): Promise<ClassDraft | null> {
   return readJson<ClassDraft>(classFilePath(id));
+}
+
+export async function updateClassFields(
+  classId: string,
+  patch: ClassFieldsPatch
+): Promise<ClassDraft | null> {
+  const classDraft = await getClassById(classId);
+  if (!classDraft) return null;
+  Object.assign(classDraft, patch);
+  return saveClass(classDraft);
 }
 
 async function saveClass(classDraft: ClassDraft): Promise<ClassDraft> {
