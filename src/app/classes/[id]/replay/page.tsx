@@ -3,6 +3,7 @@ import { getSession } from "@/lib/auth/session";
 import { getClassById } from "@/lib/classes";
 import { resolveSlotsWithAsanas } from "@/lib/resolve-slots";
 import { buildReplayFrames } from "@/lib/replay";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import ReplayPlayer from "./replay-player";
 
 export default async function ReplayPage({
@@ -32,9 +33,16 @@ export default async function ReplayPage({
   return (
     <div className="flex flex-1 justify-center bg-background-warm">
       <main className="w-full max-w-md px-8 py-16">
+        <Breadcrumbs
+          items={[
+            { label: "Guru", href: "/dashboard" },
+            { label: classDraft.name, href: `/classes/${id}` },
+            { label: "Replay" },
+          ]}
+        />
         <p className="label text-muted">{classDraft.classType}</p>
         <h1 className="mb-8 text-3xl text-ink">Replay</h1>
-        <ReplayPlayer classId={id} frames={frames} />
+        <ReplayPlayer frames={frames} />
       </main>
     </div>
   );

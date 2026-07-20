@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getSession } from "@/lib/auth/session";
 import { getClassById } from "@/lib/classes";
 import { resolveSlotsWithAsanas } from "@/lib/resolve-slots";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import ClassSlotsEditor from "./class-slots-editor";
 import ClassDetailsSection from "./class-details-section";
 import SaveStatusButton from "./save-status-button";
@@ -24,6 +25,9 @@ export default async function ClassDetailPage({
   return (
     <div className="flex flex-1 justify-center bg-background-warm">
       <main className="w-full max-w-md px-8 py-16">
+        <Breadcrumbs
+          items={[{ label: "Guru", href: "/dashboard" }, { label: classDraft.name }]}
+        />
         <div className="mb-8 flex items-start justify-between gap-4">
           <div>
             <p className="label text-muted">{classDraft.status}</p>

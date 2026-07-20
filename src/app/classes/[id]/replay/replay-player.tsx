@@ -1,15 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { ReplayFrame } from "@/lib/replay";
 
 interface Props {
-  classId: string;
   frames: ReplayFrame[];
 }
 
-export default function ReplayPlayer({ classId, frames }: Props) {
+export default function ReplayPlayer({ frames }: Props) {
   const [index, setIndex] = useState(0);
   const [remaining, setRemaining] = useState(() => frames[0]?.durationSeconds ?? 0);
   const [playing, setPlaying] = useState(true);
@@ -39,14 +37,7 @@ export default function ReplayPlayer({ classId, frames }: Props) {
   }, [playing, index, frame, frames]);
 
   if (frames.length === 0) {
-    return (
-      <div>
-        <p className="text-muted">Nothing to replay.</p>
-        <Link href={`/classes/${classId}`} className="label mt-4 inline-block text-muted hover:text-ink">
-          Back to class
-        </Link>
-      </div>
-    );
+    return <p className="text-muted">Nothing to replay.</p>;
   }
 
   return (
@@ -94,10 +85,6 @@ export default function ReplayPlayer({ classId, frames }: Props) {
           Next
         </button>
       </div>
-
-      <Link href={`/classes/${classId}`} className="label mt-6 inline-block text-muted hover:text-ink">
-        Back to class
-      </Link>
     </div>
   );
 }
