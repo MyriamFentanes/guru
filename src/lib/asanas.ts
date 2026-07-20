@@ -1,6 +1,7 @@
 import { readdir } from "node:fs/promises";
 import { readJson, removeDir, writeBinaryFile, writeJson } from "@/lib/storage/file-store";
 import { ASANAS_DIR, asanaDir, asanaImagePath, asanaMetaPath } from "@/lib/storage/paths";
+import { imageExtension, type ImageUpload } from "@/lib/image-upload";
 import type { Asana } from "@/lib/types";
 
 export interface AsanaInput {
@@ -16,17 +17,7 @@ export interface AsanaInput {
   notes?: string;
 }
 
-export interface AsanaImageUpload {
-  buffer: Buffer;
-  mimeType: string;
-  filename: string;
-}
-
-const MIME_EXTENSIONS: Record<string, string> = {
-  "image/jpeg": "jpeg",
-  "image/png": "png",
-  "image/webp": "webp",
-};
+export type AsanaImageUpload = ImageUpload;
 
 function slugify(name: string): string {
   return name
@@ -34,12 +25,6 @@ function slugify(name: string): string {
     .trim()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-+|-+$)/g, "");
-}
-
-function imageExtension(image: AsanaImageUpload): string {
-  if (MIME_EXTENSIONS[image.mimeType]) return MIME_EXTENSIONS[image.mimeType];
-  const fromName = image.filename.split(".").pop();
-  return fromName || "jpeg";
 }
 
 export async function listAsanas(): Promise<Asana[]> {

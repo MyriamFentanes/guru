@@ -1,7 +1,5 @@
 import type { AsanaImageUpload, AsanaInput } from "@/lib/asanas";
-
-const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
-const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+import { extractImageUpload, ImageValidationError } from "@/lib/image-upload";
 
 export class AsanaFormError extends Error {}
 
@@ -51,20 +49,12 @@ export async function parseAsanaForm(
     notes: (form.get("notes") as string) || undefined,
   };
 
-  const file = form.get("image");
-  let image: AsanaImageUpload | null = null;
-  if (file instanceof File && file.size > 0) {
-    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
-      throw new AsanaFormError(`image must be one of: ${ALLOWED_IMAGE_TYPES.join(", ")}`);
-    }
-    if (file.size > MAX_IMAGE_BYTES) {
-      throw new AsanaFormError("image must be 5MB or smaller");
-    }
-    image = {
-      buffer: Buffer.from(await file.arrayBuffer()),
-      mimeType: file.type,
-      filename: file.name,
-    };
+  let image: AsanaImageUpload | null;
+  try {
+    image = await extractImageUpload(form.get("image"));
+  } catch (err) {
+    if (err instanceof ImageValidationError) throw new AsanaFormError(err.message);
+    throw err;
   }
 
   return { input, image };

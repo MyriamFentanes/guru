@@ -1,19 +1,25 @@
 import Link from "next/link";
 import { getSession } from "@/lib/auth/session";
 import { listClassesByTeacher } from "@/lib/classes";
+import { getUserById } from "@/lib/users";
 import LogoutButton from "./logout-button";
+import ProfilePhoto from "./profile-photo";
 
 export default async function DashboardPage() {
   const session = await getSession();
   const classes = session ? await listClassesByTeacher(session.userId) : [];
+  const user = session ? await getUserById(session.userId) : null;
 
   return (
     <div className="flex flex-1 bg-background-warm">
       <main className="mx-auto w-full max-w-2xl px-8 py-16">
         <div className="mb-10 flex items-start justify-between">
-          <div>
-            <p className="label text-muted">Signed in as</p>
-            <h1 className="text-3xl text-ink">{session?.email}</h1>
+          <div className="flex items-center gap-4">
+            {session && <ProfilePhoto userId={session.userId} hasPhoto={Boolean(user?.photo)} />}
+            <div>
+              <p className="label text-muted">Signed in as</p>
+              <h1 className="text-3xl text-ink">{session?.email}</h1>
+            </div>
           </div>
           <LogoutButton />
         </div>

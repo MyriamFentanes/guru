@@ -19,7 +19,8 @@ Storage is flat-file for now (decision: files now, real database later once it's
   - Schema and field docs: [`content/asanas/asana.schema.json`](./content/asanas/asana.schema.json). To add a new asana via git instead of the UI, copy `content/asanas/_template/` — see [`content/asanas/README.md`](./content/asanas/README.md).
   - The seed set was auto-drafted from photos and is marked `verified: false` until a teacher reviews it.
   - Images aren't under `public/`, so they're served through `/api/asanas/[slug]/image` rather than as static assets.
-- `data/users.json` — user accounts (bcrypt password hashes, role). Gitignored; runtime data.
+- `data/users.json` — user accounts (bcrypt password hashes, role, profile photo filename). Gitignored; runtime data.
+- `data/users/<id>/photo.<ext>` — profile photo, served through `/api/users/[id]/photo`. Gitignored; runtime data.
 - `data/classes/<id>.json` — saved classes. Gitignored; runtime data.
 
 Concurrent writes to a given JSON file are serialized with an in-process lock in `file-store.ts`, and writes are atomic (write to a temp file, then rename). That's sufficient for a single Next.js server instance; it would need revisiting (e.g. a real DB) before running multiple instances.
