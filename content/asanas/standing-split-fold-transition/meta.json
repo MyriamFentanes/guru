@@ -1,0 +1,14 @@
+{
+  "$schema": "../asana.schema.json",
+  "slug": "standing-split-fold-transition",
+  "name": "Standing Split Forward Fold",
+  "sanskritName": "Urdhva Prasarita Eka Padasana",
+  "otherNames": ["Standing Split"],
+  "musclesInvolved": ["hamstrings", "shoulders", "core", "calves"],
+  "series": [],
+  "durationSeconds": 15,
+  "assists": [],
+  "image": "image.jpeg",
+  "verified": false,
+  "notes": "Auto-identified from a photo import; low confidence - this could be a static hold or a transition frame into an arm balance (e.g. toward Bakasana). Please confirm or correct name, sanskritName, and duration before use in a real class."
+}
