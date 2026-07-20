@@ -19,10 +19,14 @@ export default function ClassSlotsEditor({ classId, initialSlots }: Props) {
   const [error, setError] = useState<string | null>(null);
 
   const asanaLookup = useMemo(() => {
-    const map: Record<string, { name: string; durationSeconds: number }> = {};
+    const map: Record<string, { name: string; sanskritName: string; durationSeconds: number }> = {};
     for (const slot of initialSlots) {
       for (const asana of slot.asanas) {
-        map[asana.slug] = { name: asana.name, durationSeconds: asana.durationSeconds };
+        map[asana.slug] = {
+          name: asana.name,
+          sanskritName: asana.sanskritName,
+          durationSeconds: asana.durationSeconds,
+        };
       }
     }
     return map;
