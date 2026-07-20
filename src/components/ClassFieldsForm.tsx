@@ -12,6 +12,7 @@ export interface ClassFieldsInitial {
   series?: string;
   classType: string;
   focus?: string;
+  notes?: string;
 }
 
 interface Props {
@@ -29,6 +30,7 @@ export default function ClassFieldsForm({ mode, classId, initial, onSaved }: Pro
   const [series, setSeries] = useState(initial?.series ?? "");
   const [classType, setClassType] = useState(initial?.classType ?? "");
   const [focus, setFocus] = useState(initial?.focus ?? "");
+  const [notes, setNotes] = useState(initial?.notes ?? "");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -43,7 +45,7 @@ export default function ClassFieldsForm({ mode, classId, initial, onSaved }: Pro
       const res = await fetch(url, {
         method: mode === "create" ? "POST" : "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, durationMinutes, level, series, classType, focus }),
+        body: JSON.stringify({ name, durationMinutes, level, series, classType, focus, notes }),
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
@@ -135,6 +137,17 @@ export default function ClassFieldsForm({ mode, classId, initial, onSaved }: Pro
           value={focus}
           onChange={(e) => setFocus(e.target.value)}
           className="field-input"
+        />
+      </label>
+
+      <label className="flex flex-col gap-2">
+        <span className="label text-muted">Notes (optional)</span>
+        <textarea
+          placeholder="Teaching cues, adjustments for next time..."
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          className="field-input"
+          rows={3}
         />
       </label>
 

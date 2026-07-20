@@ -12,7 +12,7 @@ export const GET = withAuth(async (session) => {
 
 export const POST = withAuth(async (session, req) => {
   const body = await req.json().catch(() => null);
-  const { name, durationMinutes, level, series, classType, focus } = body ?? {};
+  const { name, durationMinutes, level, series, classType, focus, notes } = body ?? {};
 
   if (typeof name !== "string" || name.trim().length === 0) {
     return NextResponse.json({ error: "name is required" }, { status: 400 });
@@ -38,6 +38,9 @@ export const POST = withAuth(async (session, req) => {
   if (focus !== undefined && typeof focus !== "string") {
     return NextResponse.json({ error: "focus must be a string" }, { status: 400 });
   }
+  if (notes !== undefined && typeof notes !== "string") {
+    return NextResponse.json({ error: "notes must be a string" }, { status: 400 });
+  }
 
   const classDraft = await createClass(session.userId, {
     name: name.trim(),
@@ -46,6 +49,7 @@ export const POST = withAuth(async (session, req) => {
     series: series || undefined,
     classType: classType.trim(),
     focus: focus || undefined,
+    notes: notes || undefined,
   });
   return NextResponse.json(classDraft, { status: 201 });
 });

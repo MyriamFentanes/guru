@@ -70,6 +70,12 @@ export const PATCH = withAuth<Context>(async (session, req, context) => {
     }
     patch.focus = body.focus || undefined;
   }
+  if ("notes" in body) {
+    if (typeof body.notes !== "string") {
+      return NextResponse.json({ error: "notes must be a string" }, { status: 400 });
+    }
+    patch.notes = body.notes || undefined;
+  }
   if ("status" in body) {
     if (typeof body.status !== "string" || !STATUSES.includes(body.status as ClassStatus)) {
       return NextResponse.json({ error: `status must be one of: ${STATUSES.join(", ")}` }, { status: 400 });

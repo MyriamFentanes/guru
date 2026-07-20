@@ -11,6 +11,7 @@ export interface NewClassInput {
   series?: string;
   classType: string;
   focus?: string;
+  notes?: string;
 }
 
 export interface ClassFieldsPatch {
@@ -20,6 +21,7 @@ export interface ClassFieldsPatch {
   series?: string;
   classType?: string;
   focus?: string;
+  notes?: string;
   status?: ClassStatus;
 }
 
@@ -35,6 +37,7 @@ export async function createClass(teacherId: string, input: NewClassInput): Prom
     series: input.series,
     classType: input.classType,
     focus: input.focus,
+    notes: input.notes,
     slots: [],
     createdAt: now,
     updatedAt: now,

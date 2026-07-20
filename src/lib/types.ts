@@ -56,6 +56,7 @@ export interface ClassDraft {
   series?: string;
   classType: string;
   focus?: string;
+  notes?: string;
   slots: ClassSlot[];
   createdAt: string;
   updatedAt: string;
