@@ -1,8 +1,15 @@
 import { getAsanaBySlug } from "@/lib/asanas";
 import type { ClassSlot } from "@/lib/types";
 
+export interface ResolvedAsana {
+  slug: string;
+  name: string;
+  sanskritName: string;
+  durationSeconds: number;
+}
+
 export interface ResolvedSlot extends ClassSlot {
-  asanas: { slug: string; name: string; durationSeconds: number }[];
+  asanas: ResolvedAsana[];
 }
 
 /** Resolves each slot's asanaSlugs into display data (name, duration).
@@ -14,12 +21,19 @@ export async function resolveSlotsWithAsanas(slots: ClassSlot[]): Promise<Resolv
       ...slot,
       asanas: (
         await Promise.all(
-          slot.asanaSlugs.map(async (slug) => {
+          slot.asanaSlugs.map(async (slug): Promise<ResolvedAsana | null> => {
             const asana = await getAsanaBySlug(slug);
-            return asana ? { slug, name: asana.name, durationSeconds: asana.durationSeconds } : null;
+            return asana
+              ? {
+                  slug,
+                  name: asana.name,
+                  sanskritName: asana.sanskritName,
+                  durationSeconds: asana.durationSeconds,
+                }
+              : null;
           })
         )
-      ).filter((a): a is { slug: string; name: string; durationSeconds: number } => a !== null),
+      ).filter((a): a is ResolvedAsana => a !== null),
     }))
   );
 }

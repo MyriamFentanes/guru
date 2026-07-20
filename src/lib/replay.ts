@@ -4,6 +4,7 @@ export interface ReplayFrame {
   slotId: string;
   asanaSlug: string;
   name: string;
+  sanskritName: string;
   durationSeconds: number;
   isProgression: boolean;
   progressionIndex?: number;
@@ -27,6 +28,7 @@ export function buildReplayFrames(slots: ResolvedSlot[]): ReplayFrame[] {
         slotId: slot.id,
         asanaSlug: only.slug,
         name: only.name,
+        sanskritName: only.sanskritName,
         durationSeconds: totalSeconds,
         isProgression: false,
       });
@@ -39,6 +41,7 @@ export function buildReplayFrames(slots: ResolvedSlot[]): ReplayFrame[] {
         slotId: slot.id,
         asanaSlug: asana.slug,
         name: asana.name,
+        sanskritName: asana.sanskritName,
         durationSeconds: perFrame,
         isProgression: true,
         progressionIndex: index + 1,
