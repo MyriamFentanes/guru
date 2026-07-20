@@ -1,0 +1,14 @@
+{
+  "$schema": "../asana.schema.json",
+  "slug": "dwi-pada-sirsasana-fold",
+  "name": "Bound Ankle Head Fold",
+  "sanskritName": "Dwi Pada Sirsasana",
+  "otherNames": ["Two-Legged Pose Behind the Head (tentative)"],
+  "musclesInvolved": ["hips", "hamstrings", "shoulders", "core"],
+  "series": [],
+  "durationSeconds": 15,
+  "assists": [],
+  "image": "image.jpeg",
+  "verified": false,
+  "notes": "Auto-identified from a photo import; low confidence on the exact traditional name - the crossed-ankle-behind-head compression shape is distinctive but hard to pin down precisely from a single angle. Please confirm or correct name, sanskritName, and duration before use in a real class."
+}
