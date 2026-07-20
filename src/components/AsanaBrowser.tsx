@@ -19,6 +19,7 @@ export default function AsanaBrowser({ mode, classId, existingSlugs = [] }: Prop
   const [verifiedFilter, setVerifiedFilter] = useState<"all" | "verified" | "draft">("all");
   const [addingSlug, setAddingSlug] = useState<string | null>(null);
   const [addedSlugs, setAddedSlugs] = useState<string[]>(existingSlugs);
+  const [detailAsana, setDetailAsana] = useState<Asana | null>(null);
 
   useEffect(() => {
     fetch("/api/asanas")
@@ -116,7 +117,12 @@ export default function AsanaBrowser({ mode, classId, existingSlugs = [] }: Prop
 
       <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4">
         {filtered.map((asana) => (
-          <div key={asana.slug} className="flex flex-col gap-2 border border-accent-taupe p-3">
+          <div
+            key={asana.slug}
+            onDoubleClick={() => setDetailAsana(asana)}
+            className="flex cursor-pointer flex-col gap-2 border border-accent-taupe p-3"
+            title="Double-click for description"
+          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={`/api/asanas/${asana.slug}/image`}
@@ -126,17 +132,30 @@ export default function AsanaBrowser({ mode, classId, existingSlugs = [] }: Prop
             <div>
               <p className="text-ink">{asana.name}</p>
               <p className="text-sm text-muted">{asana.sanskritName}</p>
-              {!asana.verified && <p className="label text-muted">Draft</p>}
+              <span
+                className={`label mt-1 inline-block border px-2 py-0.5 ${
+                  asana.verified ? "border-ink text-ink" : "border-accent-taupe text-muted"
+                }`}
+              >
+                {asana.verified ? "Verified" : "Draft"}
+              </span>
             </div>
             {mode === "curate" ? (
-              <Link href={`/asanas/${asana.slug}/edit`} className="label text-muted hover:text-ink">
+              <Link
+                href={`/asanas/${asana.slug}/edit`}
+                onClick={(e) => e.stopPropagation()}
+                className="label text-muted hover:text-ink"
+              >
                 Edit
               </Link>
             ) : addedSlugs.includes(asana.slug) ? (
               <span className="label text-muted">Added</span>
             ) : (
               <button
-                onClick={() => handleAdd(asana.slug)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleAdd(asana.slug);
+                }}
                 disabled={addingSlug === asana.slug}
                 className="button-primary text-center"
               >
@@ -146,6 +165,30 @@ export default function AsanaBrowser({ mode, classId, existingSlugs = [] }: Prop
           </div>
         ))}
       </div>
+
+      {detailAsana && (
+        <div
+          onClick={() => setDetailAsana(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-8"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="max-w-md bg-background p-6"
+          >
+            <p className="text-2xl text-ink">{detailAsana.name}</p>
+            <p className="text-muted italic">{detailAsana.sanskritName}</p>
+            <p className="mt-4 text-ink">
+              {detailAsana.description || "No description yet for this asana."}
+            </p>
+            <button
+              onClick={() => setDetailAsana(null)}
+              className="label mt-6 text-muted hover:text-ink"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
