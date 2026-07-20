@@ -29,7 +29,17 @@ export default async function ClassDetailPage({
             <p className="label text-muted">{classDraft.status}</p>
             <h1 className="text-3xl text-ink">{classDraft.name}</h1>
           </div>
-          <SaveStatusButton classId={classDraft.id} status={classDraft.status} />
+          <div className="flex items-center gap-4">
+            {classDraft.status === "saved" && (
+              <a
+                href={`/api/classes/${classDraft.id}/pdf`}
+                className="label text-muted hover:text-ink"
+              >
+                Download PDF
+              </a>
+            )}
+            <SaveStatusButton classId={classDraft.id} status={classDraft.status} />
+          </div>
         </div>
         <div className="flex flex-col gap-8">
           <ClassDetailsSection

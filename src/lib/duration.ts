@@ -3,16 +3,20 @@ export interface DurationSlot {
   repetitions: number;
 }
 
+export function computeSlotDurationSeconds(
+  slot: DurationSlot,
+  durationSecondsBySlug: Record<string, number>
+): number {
+  return (durationSecondsBySlug[slot.primaryAsanaSlug] ?? 0) * slot.repetitions;
+}
+
 /** Pure - no fs deps - safe to import from client components for instant
  * local recalculation as a teacher edits repetitions/groupings. */
 export function computeTotalDurationSeconds(
   slots: DurationSlot[],
   durationSecondsBySlug: Record<string, number>
 ): number {
-  return slots.reduce(
-    (total, slot) => total + (durationSecondsBySlug[slot.primaryAsanaSlug] ?? 0) * slot.repetitions,
-    0
-  );
+  return slots.reduce((total, slot) => total + computeSlotDurationSeconds(slot, durationSecondsBySlug), 0);
 }
 
 export function formatDuration(totalSeconds: number): string {
