@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getSession } from "@/lib/auth/session";
 import { listClassesByTeacher } from "@/lib/classes";
 import { getUserById } from "@/lib/users";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import LogoutButton from "./logout-button";
 import ProfilePhoto from "./profile-photo";
 
@@ -13,6 +14,7 @@ export default async function DashboardPage() {
   return (
     <div className="flex flex-1 bg-background-warm">
       <main className="mx-auto w-full max-w-2xl px-8 py-16">
+        <Breadcrumbs items={[{ label: "Guru" }]} />
         <div className="mb-10 flex items-start justify-between">
           <div className="flex items-center gap-4">
             {session && <ProfilePhoto userId={session.userId} hasPhoto={Boolean(user?.photo)} />}

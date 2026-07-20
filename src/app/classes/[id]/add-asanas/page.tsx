@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSession } from "@/lib/auth/session";
 import { getClassById } from "@/lib/classes";
 import AsanaBrowser from "@/components/AsanaBrowser";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 export default async function AddAsanasPage({
   params,
@@ -17,14 +17,16 @@ export default async function AddAsanasPage({
   return (
     <div className="flex flex-1 justify-center bg-background-warm">
       <main className="w-full max-w-5xl px-8 py-16">
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <p className="label text-muted">{classDraft.classType}</p>
-            <h1 className="text-3xl text-ink">Add asanas</h1>
-          </div>
-          <Link href={`/classes/${id}`} className="label text-muted hover:text-ink">
-            Back to class
-          </Link>
+        <Breadcrumbs
+          items={[
+            { label: "Guru", href: "/dashboard" },
+            { label: classDraft.name, href: `/classes/${id}` },
+            { label: "Add asanas" },
+          ]}
+        />
+        <div className="mb-8">
+          <p className="label text-muted">{classDraft.classType}</p>
+          <h1 className="text-3xl text-ink">Add asanas</h1>
         </div>
         <AsanaBrowser
           mode="select"
