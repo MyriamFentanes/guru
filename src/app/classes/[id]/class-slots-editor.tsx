@@ -142,7 +142,7 @@ export default function ClassSlotsEditor({ classId, initialSlots }: Props) {
                   className="h-12 w-12 shrink-0 object-cover"
                 />
                 <div className="flex-1">
-                  <span className="text-ink">{primary?.name ?? slot.primaryAsanaSlug}</span>
+                  <span className="text-ink">{primary?.sanskritName ?? slot.primaryAsanaSlug}</span>
                   {others.length > 0 && (
                     <span className="label ml-2 text-muted">+{others.length} progression(s)</span>
                   )}
