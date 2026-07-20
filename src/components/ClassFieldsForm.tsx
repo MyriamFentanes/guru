@@ -6,6 +6,7 @@ import type { ClassLevel } from "@/lib/types";
 import { SERIES_OPTIONS, CLASS_TYPE_SUGGESTIONS } from "@/lib/class-options";
 
 export interface ClassFieldsInitial {
+  name: string;
   durationMinutes: number;
   level: ClassLevel;
   series?: string;
@@ -22,6 +23,7 @@ interface Props {
 
 export default function ClassFieldsForm({ mode, classId, initial, onSaved }: Props) {
   const router = useRouter();
+  const [name, setName] = useState(initial?.name ?? "");
   const [durationMinutes, setDurationMinutes] = useState(initial?.durationMinutes ?? 60);
   const [level, setLevel] = useState<ClassLevel>(initial?.level ?? "beginner");
   const [series, setSeries] = useState(initial?.series ?? "");
@@ -41,7 +43,7 @@ export default function ClassFieldsForm({ mode, classId, initial, onSaved }: Pro
       const res = await fetch(url, {
         method: mode === "create" ? "POST" : "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ durationMinutes, level, series, classType, focus }),
+        body: JSON.stringify({ name, durationMinutes, level, series, classType, focus }),
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
@@ -64,6 +66,18 @@ export default function ClassFieldsForm({ mode, classId, initial, onSaved }: Pro
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+      <label className="flex flex-col gap-2">
+        <span className="label text-muted">Name</span>
+        <input
+          type="text"
+          required
+          placeholder="e.g. Sunday Morning Flow"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="field-input"
+        />
+      </label>
+
       <label className="flex flex-col gap-2">
         <span className="label text-muted">Duration (minutes)</span>
         <input

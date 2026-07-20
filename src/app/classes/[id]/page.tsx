@@ -27,7 +27,7 @@ export default async function ClassDetailPage({
         <div className="mb-8 flex items-start justify-between gap-4">
           <div>
             <p className="label text-muted">{classDraft.status}</p>
-            <h1 className="text-3xl text-ink">{classDraft.classType}</h1>
+            <h1 className="text-3xl text-ink">{classDraft.name}</h1>
           </div>
           <SaveStatusButton classId={classDraft.id} status={classDraft.status} />
         </div>
@@ -35,6 +35,7 @@ export default async function ClassDetailPage({
           <ClassDetailsSection
             classId={classDraft.id}
             initial={{
+              name: classDraft.name,
               durationMinutes: classDraft.durationMinutes,
               level: classDraft.level,
               series: classDraft.series,

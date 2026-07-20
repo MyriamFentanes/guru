@@ -5,6 +5,7 @@ import { CLASSES_DIR, classFilePath } from "@/lib/storage/paths";
 import type { ClassDraft, ClassLevel, ClassStatus } from "@/lib/types";
 
 export interface NewClassInput {
+  name: string;
   durationMinutes: number;
   level: ClassLevel;
   series?: string;
@@ -13,6 +14,7 @@ export interface NewClassInput {
 }
 
 export interface ClassFieldsPatch {
+  name?: string;
   durationMinutes?: number;
   level?: ClassLevel;
   series?: string;
@@ -27,6 +29,7 @@ export async function createClass(teacherId: string, input: NewClassInput): Prom
     id: randomUUID(),
     teacherId,
     status: "draft",
+    name: input.name,
     durationMinutes: input.durationMinutes,
     level: input.level,
     series: input.series,

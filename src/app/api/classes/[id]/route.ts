@@ -31,6 +31,12 @@ export const PATCH = withAuth<Context>(async (session, req, context) => {
 
   const patch: ClassFieldsPatch = {};
 
+  if ("name" in body) {
+    if (typeof body.name !== "string" || body.name.trim().length === 0) {
+      return NextResponse.json({ error: "name is required" }, { status: 400 });
+    }
+    patch.name = body.name.trim();
+  }
   if ("durationMinutes" in body) {
     if (typeof body.durationMinutes !== "number" || body.durationMinutes <= 0) {
       return NextResponse.json(
