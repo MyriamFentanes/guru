@@ -4,6 +4,7 @@ const ROOT = process.cwd();
 
 export const DATA_DIR = path.join(ROOT, "data");
 export const USERS_FILE = path.join(DATA_DIR, "users.json");
+export const USERS_DIR = path.join(DATA_DIR, "users");
 export const CLASSES_DIR = path.join(DATA_DIR, "classes");
 export const CONTENT_DIR = path.join(ROOT, "content");
 export const ASANAS_DIR = path.join(CONTENT_DIR, "asanas");
@@ -22,4 +23,8 @@ export function asanaMetaPath(slug: string): string {
 
 export function asanaImagePath(slug: string, filename: string): string {
   return path.join(ASANAS_DIR, slug, filename);
+}
+
+export function userPhotoPath(userId: string, filename: string): string {
+  return path.join(USERS_DIR, userId, filename);
 }

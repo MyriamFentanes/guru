@@ -38,6 +38,7 @@ yarn-error.log*
 
 # runtime data store (users, sessions, saved classes) - not committed, seeded per-environment
 /data/users.json
+/data/users/*/
 /data/classes/*.json
 
 # typescript

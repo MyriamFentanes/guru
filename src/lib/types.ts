@@ -6,6 +6,7 @@ export interface User {
   passwordHash: string;
   role: Role;
   createdAt: string;
+  photo?: string;
 }
 
 export interface SessionPayload {

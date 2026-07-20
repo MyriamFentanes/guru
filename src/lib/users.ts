@@ -18,6 +18,15 @@ export async function getUserById(id: string): Promise<User | null> {
   return users.find((u) => u.id === id) ?? null;
 }
 
+export async function updateUserPhoto(userId: string, photoFilename: string): Promise<User | null> {
+  const users = await readAllUsers();
+  const user = users.find((u) => u.id === userId);
+  if (!user) return null;
+  user.photo = photoFilename;
+  await writeJson(USERS_FILE, users);
+  return user;
+}
+
 export async function createUser(
   email: string,
   plainPassword: string,
