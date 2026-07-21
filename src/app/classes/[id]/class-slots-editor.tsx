@@ -17,6 +17,8 @@ export default function ClassSlotsEditor({ classId, initialSlots }: Props) {
   const [selected, setSelected] = useState<string[]>([]);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [dragOverId, setDragOverId] = useState<string | null>(null);
 
   const asanaLookup = useMemo(() => {
     const map: Record<string, { name: string; sanskritName: string; durationSeconds: number }> = {};
@@ -62,29 +64,40 @@ export default function ClassSlotsEditor({ classId, initialSlots }: Props) {
     });
   }
 
-  async function handleMove(slotId: string, direction: "up" | "down") {
-    const index = slots.findIndex((s) => s.id === slotId);
-    const targetIndex = direction === "up" ? index - 1 : index + 1;
-    if (index === -1 || targetIndex < 0 || targetIndex >= slots.length) return;
-
-    setBusy(slotId);
-    try {
-      const res = await fetch(`/api/classes/${classId}/slots/${slotId}/move`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ direction }),
-      });
-      if (!res.ok) throw new Error("Could not reorder");
-      setSlots((prev) => {
-        const next = [...prev];
-        [next[index], next[targetIndex]] = [next[targetIndex], next[index]];
-        return next;
-      });
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
-    } finally {
-      setBusy(null);
+  async function persistOrder(orderedIds: string[], previousSlots: ResolvedSlot[]) {
+    const res = await fetch(`/api/classes/${classId}/slots/reorder`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slotIds: orderedIds }),
+    });
+    if (!res.ok) {
+      setSlots(previousSlots);
+      setError("Could not save the new order");
     }
+  }
+
+  function handleDrop(targetSlotId: string) {
+    setDragOverId(null);
+    if (!draggedId || draggedId === targetSlotId) {
+      setDraggedId(null);
+      return;
+    }
+    const previousSlots = slots;
+    const next = [...slots];
+    const fromIndex = next.findIndex((s) => s.id === draggedId);
+    const toIndex = next.findIndex((s) => s.id === targetSlotId);
+    if (fromIndex === -1 || toIndex === -1) {
+      setDraggedId(null);
+      return;
+    }
+    const [moved] = next.splice(fromIndex, 1);
+    next.splice(toIndex, 0, moved);
+    setSlots(next);
+    setDraggedId(null);
+    persistOrder(
+      next.map((s) => s.id),
+      previousSlots
+    );
   }
 
   async function handleRemove(slotId: string) {
@@ -150,29 +163,38 @@ export default function ClassSlotsEditor({ classId, initialSlots }: Props) {
         <p className="text-muted">None added yet.</p>
       ) : (
         <ul className="flex flex-col gap-2">
-          {slots.map((slot, index) => {
+          {slots.map((slot) => {
             const primary = asanaLookup[slot.primaryAsanaSlug];
             const others = slot.asanaSlugs.filter((s) => s !== slot.primaryAsanaSlug);
             return (
-              <li key={slot.id} className="flex items-center gap-3 border border-accent-taupe px-4 py-2">
-                <div className="flex flex-col">
-                  <button
-                    onClick={() => handleMove(slot.id, "up")}
-                    disabled={index === 0 || busy === slot.id}
-                    className="text-muted hover:text-ink disabled:opacity-30"
-                    aria-label="Move up"
-                  >
-                    ▲
-                  </button>
-                  <button
-                    onClick={() => handleMove(slot.id, "down")}
-                    disabled={index === slots.length - 1 || busy === slot.id}
-                    className="text-muted hover:text-ink disabled:opacity-30"
-                    aria-label="Move down"
-                  >
-                    ▼
-                  </button>
-                </div>
+              <li
+                key={slot.id}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  if (dragOverId !== slot.id) setDragOverId(slot.id);
+                }}
+                onDragLeave={() => setDragOverId((prev) => (prev === slot.id ? null : prev))}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  handleDrop(slot.id);
+                }}
+                className={`flex items-center gap-3 border px-4 py-2 ${
+                  dragOverId === slot.id ? "border-ink" : "border-accent-taupe"
+                } ${draggedId === slot.id ? "opacity-40" : ""}`}
+              >
+                <span
+                  draggable
+                  onDragStart={() => setDraggedId(slot.id)}
+                  onDragEnd={() => {
+                    setDraggedId(null);
+                    setDragOverId(null);
+                  }}
+                  className="cursor-grab select-none text-muted hover:text-ink active:cursor-grabbing"
+                  aria-label="Drag to reorder"
+                  title="Drag to reorder"
+                >
+                  ⠿
+                </span>
                 <input
                   type="checkbox"
                   checked={selected.includes(slot.id)}

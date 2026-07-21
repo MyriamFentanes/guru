@@ -101,24 +101,29 @@ export async function setSlotRepetitions(
   return saveClass(classDraft);
 }
 
-/** Swaps a slot with its neighbor in the given direction. No-op (returns
- * the class unchanged) if already at that end of the list. */
-export async function moveSlot(
+/** Reorders slots to match orderedSlotIds exactly. Rejects (returns
+ * null) unless orderedSlotIds is a permutation of the class's current
+ * slot ids - same length, same set, no duplicates - so a drag-and-drop
+ * reorder can't silently drop or duplicate a slot. */
+export async function reorderSlots(
   classId: string,
-  slotId: string,
-  direction: "up" | "down"
+  orderedSlotIds: string[]
 ): Promise<ClassDraft | null> {
   const classDraft = await getClassById(classId);
   if (!classDraft) return null;
 
-  const index = classDraft.slots.findIndex((s) => s.id === slotId);
-  if (index === -1) return null;
-  const targetIndex = direction === "up" ? index - 1 : index + 1;
-  if (targetIndex < 0 || targetIndex >= classDraft.slots.length) return classDraft;
+  const currentIds = new Set(classDraft.slots.map((s) => s.id));
+  const newIds = new Set(orderedSlotIds);
+  if (
+    orderedSlotIds.length !== classDraft.slots.length ||
+    newIds.size !== orderedSlotIds.length ||
+    ![...currentIds].every((id) => newIds.has(id))
+  ) {
+    return null;
+  }
 
-  const slots = [...classDraft.slots];
-  [slots[index], slots[targetIndex]] = [slots[targetIndex], slots[index]];
-  classDraft.slots = slots;
+  const byId = new Map(classDraft.slots.map((s) => [s.id, s]));
+  classDraft.slots = orderedSlotIds.map((id) => byId.get(id)!);
   return saveClass(classDraft);
 }
 
