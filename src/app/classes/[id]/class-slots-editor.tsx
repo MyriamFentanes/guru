@@ -62,6 +62,31 @@ export default function ClassSlotsEditor({ classId, initialSlots }: Props) {
     });
   }
 
+  async function handleMove(slotId: string, direction: "up" | "down") {
+    const index = slots.findIndex((s) => s.id === slotId);
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    if (index === -1 || targetIndex < 0 || targetIndex >= slots.length) return;
+
+    setBusy(slotId);
+    try {
+      const res = await fetch(`/api/classes/${classId}/slots/${slotId}/move`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ direction }),
+      });
+      if (!res.ok) throw new Error("Could not reorder");
+      setSlots((prev) => {
+        const next = [...prev];
+        [next[index], next[targetIndex]] = [next[targetIndex], next[index]];
+        return next;
+      });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setBusy(null);
+    }
+  }
+
   async function handleRemove(slotId: string) {
     setBusy(slotId);
     try {
@@ -125,11 +150,29 @@ export default function ClassSlotsEditor({ classId, initialSlots }: Props) {
         <p className="text-muted">None added yet.</p>
       ) : (
         <ul className="flex flex-col gap-2">
-          {slots.map((slot) => {
+          {slots.map((slot, index) => {
             const primary = asanaLookup[slot.primaryAsanaSlug];
             const others = slot.asanaSlugs.filter((s) => s !== slot.primaryAsanaSlug);
             return (
               <li key={slot.id} className="flex items-center gap-3 border border-accent-taupe px-4 py-2">
+                <div className="flex flex-col">
+                  <button
+                    onClick={() => handleMove(slot.id, "up")}
+                    disabled={index === 0 || busy === slot.id}
+                    className="text-muted hover:text-ink disabled:opacity-30"
+                    aria-label="Move up"
+                  >
+                    ▲
+                  </button>
+                  <button
+                    onClick={() => handleMove(slot.id, "down")}
+                    disabled={index === slots.length - 1 || busy === slot.id}
+                    className="text-muted hover:text-ink disabled:opacity-30"
+                    aria-label="Move down"
+                  >
+                    ▼
+                  </button>
+                </div>
                 <input
                   type="checkbox"
                   checked={selected.includes(slot.id)}

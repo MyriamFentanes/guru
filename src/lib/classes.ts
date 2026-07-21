@@ -101,6 +101,27 @@ export async function setSlotRepetitions(
   return saveClass(classDraft);
 }
 
+/** Swaps a slot with its neighbor in the given direction. No-op (returns
+ * the class unchanged) if already at that end of the list. */
+export async function moveSlot(
+  classId: string,
+  slotId: string,
+  direction: "up" | "down"
+): Promise<ClassDraft | null> {
+  const classDraft = await getClassById(classId);
+  if (!classDraft) return null;
+
+  const index = classDraft.slots.findIndex((s) => s.id === slotId);
+  if (index === -1) return null;
+  const targetIndex = direction === "up" ? index - 1 : index + 1;
+  if (targetIndex < 0 || targetIndex >= classDraft.slots.length) return classDraft;
+
+  const slots = [...classDraft.slots];
+  [slots[index], slots[targetIndex]] = [slots[targetIndex], slots[index]];
+  classDraft.slots = slots;
+  return saveClass(classDraft);
+}
+
 /** Merges 2+ existing slots into one progression slot. The merged slot
  * keeps primaryAsanaSlug's duration as the one that counts, and starts
  * fresh at 1 repetition - repetitions don't carry over from the
