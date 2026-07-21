@@ -101,6 +101,32 @@ export async function setSlotRepetitions(
   return saveClass(classDraft);
 }
 
+/** Reorders slots to match orderedSlotIds exactly. Rejects (returns
+ * null) unless orderedSlotIds is a permutation of the class's current
+ * slot ids - same length, same set, no duplicates - so a drag-and-drop
+ * reorder can't silently drop or duplicate a slot. */
+export async function reorderSlots(
+  classId: string,
+  orderedSlotIds: string[]
+): Promise<ClassDraft | null> {
+  const classDraft = await getClassById(classId);
+  if (!classDraft) return null;
+
+  const currentIds = new Set(classDraft.slots.map((s) => s.id));
+  const newIds = new Set(orderedSlotIds);
+  if (
+    orderedSlotIds.length !== classDraft.slots.length ||
+    newIds.size !== orderedSlotIds.length ||
+    ![...currentIds].every((id) => newIds.has(id))
+  ) {
+    return null;
+  }
+
+  const byId = new Map(classDraft.slots.map((s) => [s.id, s]));
+  classDraft.slots = orderedSlotIds.map((id) => byId.get(id)!);
+  return saveClass(classDraft);
+}
+
 /** Merges 2+ existing slots into one progression slot. The merged slot
  * keeps primaryAsanaSlug's duration as the one that counts, and starts
  * fresh at 1 repetition - repetitions don't carry over from the
