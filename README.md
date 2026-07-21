@@ -35,7 +35,6 @@ Concurrent writes to a given JSON file are serialized with an in-process lock in
 
 ### Design system
 
-Visual direction is a warm, minimal boutique-studio look (reference: [barrefit.es](https://barrefit.es/), [@bodyflyingbcn](https://www.instagram.com/bodyflyingbcn/)). Tokens live in `src/app/globals.css`:
 
 - **Colors**: `background` (white) / `background-warm` (`#F8F3F2` cream) / `accent-taupe` (`#E4D7D4`) for surfaces, `ink` (black) for headings/emphasis, `foreground` (`#333`) for body text, `muted` (`#777`) for secondary text. Each has a dark-mode value via `prefers-color-scheme`.
 - **Type**: Raleway (`--font-sans`) for body/UI, Josefin Sans (`--font-display`, light weight) for headings.
